@@ -1,8 +1,10 @@
 #include <stdio.h>
 
 int printBoard(int board[]);
-int sendColumn(int board[], int column);
+int * sendColumn(int board[], int column, int player);
+int validateColumn(int board[], int column);
 int setUpBoardWalls(int board[]);
+int checkBoard(int board[], int * location, int player);
 
 char *x = "[x]";
 char *o = "[o]";
@@ -12,48 +14,77 @@ char *err = "[e]";
 
 int main(int argc, char const *argv[])
 {
-
+    int player = 1;
     int board[72] = {0};
     setUpBoardWalls(board);
     printBoard(board);
 
-    int column = 0;
-    /*while (1)
+    int column = 1;
+
+    while (1)
     {
-        printf("What column?");
-        scanf("%d", &column);
-        printf("Column selected : %d\n\n", column);
-        sendColumn(board, column);
+        int valid = -1;
+        while (valid)
+        {
+            printf("\nWhat column?");
+            scanf("%d", &column);
+            printf("Column selected : %d\n\n", column);
+            valid = validateColumn(board, column);
+        }
+        int * locationOfPiece;
+        locationOfPiece = sendColumn(board, column, player);
+        checkBoard(board, (int*)locationOfPiece, player);
         printBoard(board);
-        printf("\n\n");
-    }*/
-
-    printf("What column?");
-    /*scanf("%d",&column);*/
-    printf("Column selected : %d\n\n", column);
-    sendColumn(board, column);
-    printBoard(board);
+        if (player == 1)
+        {
+            player = 2;
+        }
+        else if (player == 2)
+        {
+            player = 1;
+        }
+    }
     printf("\n\n");
 
-    sendColumn(board, column);
-    printBoard(board);
-    printf("\n\n");
     return 0;
 }
-
-int sendColumn(int board[], int column)
+/*
+ @brief uses column and board params to change board
+ @param board 
+ @param column 
+ @param player 
+ @return returns where the piece was placed
+*/
+int * sendColumn(int board[], int column, int player)
 {
-
+    /*move out of the wall line*/
     column += 9;
 
+    /*check if column is not have piece*/
+    if (board[column] != 0)
+    {
+        return;
+    }
+
+    /* "dropping" the piece , add by 9 b/c 9 columns*/
     while (board[column] == 0)
     {
         column += 9;
     }
-
-    board[column - 9] = 1;
-
-    return 0;
+    /*choose the piece to enter*/
+    switch (player)
+    {
+    case 1:
+        board[column - 9] = 1;
+        break;
+    case 2:
+        board[column - 9] = 2;
+        break;
+    default:
+        break;
+    }
+    
+    return &board[column - 9];
 }
 
 int setUpBoardWalls(int board[])
@@ -75,15 +106,17 @@ int printBoard(int board[])
     int i = 0;
     for (i; i < 72; i++)
     {
+        /*print new line 9 b/c 9 columns*/
         if (i % 9 == 0)
         {
             printf("\n");
         }
+        /*walls*/
         if (board[i] == 3)
         {
             printf("%s", w);
         }
-        /*peice handling*/
+        /*piece handling*/
         else if (board[i] == 0)
         {
             printf("%s", e);
@@ -101,5 +134,39 @@ int printBoard(int board[])
             printf("%s", err);
         }
     }
+    return 0;
+}
+
+int validateColumn(int board[], int column)
+{
+    if (column < 1)
+    {
+        printf("Column must be above 0");
+        return -1;
+    }
+    else if (column > 7)
+    {
+        printf("Column less than 8");
+        return 1;
+    }
+
+    return 0;
+}
+
+int checkBoard(int board[], int * location, int player){
+   
+    printf("%d",*location);
+    int numInRow = 0;
+    /*check the location and all beneath, if below has same player then 
+    add to numInRow and check below */
+    while(*(location)==player){
+        location = location +9;
+        numInRow ++;
+        if (numInRow == 4){
+            printf("winner");
+            return 1;
+        }
+    }
+
     return 0;
 }
