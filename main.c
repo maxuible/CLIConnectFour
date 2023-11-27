@@ -1,10 +1,10 @@
 #include <stdio.h>
 
 int printBoard(int board[]);
-int * sendColumn(int board[], int column, int player);
+int *sendColumn(int board[], int column, int player);
 int validateColumn(int board[], int column);
 int setUpBoardWalls(int board[]);
-int checkBoard(int board[], int * location, int player);
+int checkBoard(int *location, int player);
 
 char *x = "[x]";
 char *o = "[o]";
@@ -17,9 +17,22 @@ int main(int argc, char const *argv[])
     int player = 1;
     int board[72] = {0};
     setUpBoardWalls(board);
-    printBoard(board);
 
     int column = 1;
+
+    sendColumn(board, 1, 2);
+    sendColumn(board, 1, 2);
+    /*sendColumn(board, 1, 2);*/
+    sendColumn(board, 1, 1);
+
+    sendColumn(board, 2, 2);
+    sendColumn(board, 2, 2);
+    sendColumn(board, 2, 1);
+
+    sendColumn(board, 3, 2);
+    sendColumn(board, 3, 1);
+
+    printBoard(board);
 
     while (1)
     {
@@ -31,9 +44,9 @@ int main(int argc, char const *argv[])
             printf("Column selected : %d\n\n", column);
             valid = validateColumn(board, column);
         }
-        int * locationOfPiece;
+        int *locationOfPiece;
         locationOfPiece = sendColumn(board, column, player);
-        checkBoard(board, (int*)locationOfPiece, player);
+        checkBoard((int *)locationOfPiece, player);
         printBoard(board);
         if (player == 1)
         {
@@ -49,13 +62,13 @@ int main(int argc, char const *argv[])
     return 0;
 }
 /*
- @brief uses column and board params to change board
- @param board 
- @param column 
- @param player 
- @return returns where the piece was placed
+@brief uses column and board params to change board
+@param board
+@param column
+@param player
+@return returns where the piece was placed
 */
-int * sendColumn(int board[], int column, int player)
+int *sendColumn(int board[], int column, int player)
 {
     /*move out of the wall line*/
     column += 9;
@@ -83,7 +96,7 @@ int * sendColumn(int board[], int column, int player)
     default:
         break;
     }
-    
+
     return &board[column - 9];
 }
 
@@ -152,21 +165,99 @@ int validateColumn(int board[], int column)
 
     return 0;
 }
-
-int checkBoard(int board[], int * location, int player){
-   
-    printf("%d",*location);
+/*
+@brief Only need location,
+@param location
+@param player
+@return
+*/
+int checkBoard(int *location, int player)
+{
     int numInRow = 0;
-    /*check the location and all beneath, if below has same player then 
+    int *tempLocation = location;
+
+    int checkWays[5] = {9, -1, 1, -10, 10};
+    int i = 0;
+    for (i; i < 5; i++)
+    {
+        tempLocation = location;
+        numInRow = 0;
+        /*if (*(tempLocation + checkWays[i]) != player){continue;}*/
+        while (*(tempLocation) == player)
+        {
+            tempLocation = tempLocation + checkWays[i];
+            numInRow++;
+            if (numInRow == 4)
+            {
+                printf("winner %d", player);
+                return 1;
+            }
+        }
+    }
+
+    /*VERTICAL
+    check the location and all beneath, if below has same player then
     add to numInRow and check below */
-    while(*(location)==player){
-        location = location +9;
-        numInRow ++;
-        if (numInRow == 4){
-            printf("winner");
+    /*while (*(tempLocation) == player)
+    {
+        tempLocation = tempLocation + 9;
+        numInRow++;
+        if (numInRow == 4)
+        {
+            printf("winner %d",player);
             return 1;
         }
     }
+    tempLocation = location;
+    numInRow = 0;
+    /*HORIZONTAL
+
+    while (*tempLocation == player)
+    {
+        tempLocation++;
+        numInRow++;
+        if (numInRow == 4)
+        {
+            printf("winner %d",player);
+            return 1;
+        }
+    }
+    tempLocation = location;
+    numInRow = 0;
+    while (*tempLocation == player)
+    {
+        tempLocation--;
+        numInRow++;
+        if (numInRow == 4)
+        {
+            printf("winner %d",player);
+            return 1;
+        }
+    }
+    tempLocation = location;
+    numInRow = 0;
+    while (*tempLocation == player)
+    {
+        tempLocation= tempLocation + 10;
+        numInRow++;
+        if (numInRow == 4)
+        {
+            printf("winner %d",player);
+            return 1;
+        }
+    }
+    tempLocation = location;
+    numInRow = 0;
+    while (*tempLocation == player)
+    {
+        tempLocation= tempLocation - 10;
+        numInRow++;
+        if (numInRow == 4)
+        {
+            printf("winner %d",player);
+            return 1;
+        }
+    }*/
 
     return 0;
 }
