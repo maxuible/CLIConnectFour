@@ -67,7 +67,7 @@ int *sendColumn(int board[], int column, int player)
     /*check if column is not have piece*/
     if (board[column] != 0)
     {
-        return;
+        return 0;
     }
 
     /* "dropping" the piece , add by 9 b/c 9 columns*/
