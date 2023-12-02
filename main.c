@@ -21,10 +21,6 @@ int main(int argc, char const *argv[])
 
     int column = 1;
 
-    sendColumn(board, 1,1);
-    sendColumn(board, 3,1);
-    sendColumn(board, 4,1);
-
     printBoard(board);
 
     while (winner == 0)
