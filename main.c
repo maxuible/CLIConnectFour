@@ -52,13 +52,7 @@ int main(int argc, char const *argv[])
 
     return 0;
 }
-/*
-@brief uses column and board params to change board
-@param board
-@param column
-@param player
-@return returns where the piece was placed
-*/
+
 int *sendColumn(int board[], int column, int player)
 {
     /*move out of the wall line*/
@@ -158,12 +152,7 @@ int validateColumn(int board[], int column)
 
     return 0;
 }
-/*
-@brief Checks board for winner
-@param location
-@param player
-@return player if they have 4 in row
-*/
+
 int checkBoard(int *location, int player)
 {
     int numInRow = 0;
