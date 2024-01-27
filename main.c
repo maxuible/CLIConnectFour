@@ -26,11 +26,12 @@ int main(int argc, char const *argv[])
     while (winner == 0)
     {
         int valid = -1;
+        int testInput = 0;
         while (valid)
         {
             printf("\nPlayer %d's turn", player);
             printf("\nWhat column? ");
-            scanf("%d", &column);
+            testInput = scanf("%d", &column);
             printf("Column selected : %d\n\n", column);
             valid = validateColumn(board, column);
         }
