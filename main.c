@@ -158,10 +158,10 @@ int checkBoard(int *location, int player)
     int numInRow = 0;
     int *tempLocation = location;
 
-    /*1 is for horizontal, 9 is for vertical(9columns), 10 is for diagonal*/
-    int checkWays[3] = {1, 9, 10};
+    /*1 is for horizontal, 9 is for vertical(9columns), 8/10 is for diagonal*/
+    int checkWays[4] = {1, 8, 9, 10};
     int i = 0;
-    for (i; i < 3; i++)
+    for (i; i < 4; i++)
     {
         /*working*/
         tempLocation = location;
